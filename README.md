@@ -42,5 +42,5 @@
 * Going to use a bind mount to auto refresh code with nodemon
    - Build the container
       - `docker build . -t docker-test-api:initial --build-arg DEFAULT_PORT=8080`
-   - To create the image (overriding the default port just to test)
-      - `docker run -p 3000:8081 --env-file ./.env -d --name test-api --rm -v $(pwd):/app:ro docker-test-api:initial`
+   - To create the image (overriding the default port just to test), use a named volume for the logs folder
+      - `docker run -p 3000:8081 --network test-network --env-file ./.env -d --name test-api --rm -v api-logs:/app/logs -v $(pwd):/app:ro docker-test-api:initial`

@@ -2,7 +2,7 @@ FROM node:16
 
 WORKDIR /app
 
-COPY package.json .
+COPY package.json package-lock.json ./
 
 RUN npm install
 
@@ -19,4 +19,4 @@ EXPOSE $PORT
 # Anonymous volume for the node_modules folder
 VOLUME [ "/app/node_modules" ]
 
-CMD ["npm", "start"]
+CMD ["node", "app.js"]
