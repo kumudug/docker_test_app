@@ -43,4 +43,21 @@
    - Build the container
       - `docker build . -t docker-test-api:initial --build-arg DEFAULT_PORT=8080`
    - To create the image (overriding the default port just to test), use a named volume for the logs folder
-      - `docker run -p 3000:8081 --network test-network --env-file ./.env -d --name test-api --rm -v api-logs:/app/logs -v $(pwd):/app:ro docker-test-api:initial`
+      - `docker run -p 3001:8081 --network test-network --env-file ./.env -d --name test-api --rm -v api-logs:/app/logs -v $(pwd):/app:ro docker-test-api:initial`
+      - Code refresh caused a permission issue. Removed the bind mount and make docker run `node app.js` instead. Also removed the `--rm` flag
+      - `docker run -p 3001:8081 --network test-network --env-file ./.env -d --name test-api -v api-logs:/app/log docker-test-api:initial`
+
+## Create the frontend container
+
+* Created a Dockerfile
+* Created an ARG, ENV variable for api port and replaced that in the App.js
+* Build the container
+   - `docker build . -t docker-test-app:initial --build-arg DEFAULT_PORT=3000 --build-arg DEFAULT_API_PORT=3001`
+* Create and run the image
+   - We need to add `-it` interactive flag in order to keep the react dev server running
+   - `docker run -p 8080:3000 --network test-network --env-file ./.env -d --name test-app -it --rm docker-test-app:initial`
+* In order to get node environment variables to work with the react scripts
+   - Remove `.env` file from the `.dockerignore`
+   - Duplicate the environment files with `REACT_APP_`. Ex: `REACT_APP_APIPORT=3001`
+   - This makes the react-scripts read the .env file and load them in
+* The URL of the front end app currently uses the `localhost` not the actual defined Docker network. When I tried using the api app name `test-api` instead of `localhost` I got intermittent failures.
