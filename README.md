@@ -91,3 +91,8 @@
    - Start with a named volume `docker run -d --name mongoctr -v data:/data/db --network test-network mongo:5.0.2`
    - Test by going to `http://localhost:8080/`
 
+### Using a bind mount
+   * We can also use a bind mount. This way the data directory can be easily accessed by tools
+         -`docker stop mongoctr`
+         - `docker rm mongoctr`
+         - `docker run -d --name mongoctr -v $(pwd)/data:/data/db --network test-network mongo:5.0.2`
