@@ -19,4 +19,4 @@ EXPOSE $PORT
 # Anonymous volume for the node_modules folder
 VOLUME [ "/app/node_modules" ]
 
-CMD ["node", "app.js"]
+CMD ["npm", "start"]

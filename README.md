@@ -45,10 +45,20 @@
    - To create the image (overriding the default port just to test), use a named volume for the logs folder
       - `docker run -p 3001:8081 --network test-network --env-file ./.env -d --name test-api --rm -v api-logs:/app/logs -v $(pwd):/app:ro docker-test-api:initial`
       - Code refresh caused a permission issue. Removed the bind mount and make docker run `node app.js` instead. Also removed the `--rm` flag
-      - `docker run -p 3001:8081 --network test-network --env-file ./.env -d --name test-api -v api-logs:/app/log docker-test-api:initial`
+      - `docker run -p 3001:8081 --network test-network --env-file ./.env -d --name test-api -v api-logs:/app/logs docker-test-api:initial`
    - To create the image without exposing the api for the local machine
       - This way the API is only accessible within the docker network
-      - `docker run --network test-network --env-file ./.env -d --name test-api -v api-logs:/app/log docker-test-api:initial`
+      - `docker run --network test-network --env-file ./.env -d --name test-api -v api-logs:/app/logs docker-test-api:initial`
+
+### Getting the realtime code refresh working for API project
+
+* Last time code refresh cause a permission issue thus removed the bind mount for code and now running `node app.js` in the Docker file.
+* Lets add the code as a bind mount again and change the code and test.
+   - `docker run --network test-network --env-file ./.env -d --name test-api -v $(pwd):/app:ro -v api-logs:/app/logs docker-test-api:initial`
+   - This kept giving `permission denied, open '/app/logs/access.log'`
+   - Got it working without the named volume and the physical logs folder permission set to write all `sudo chmod ugo+rwx ./app/logs`
+   - `docker run --network test-network --env-file ./.env -d --name test-api -v $(pwd):/app:ro docker-test-api:initial`
+
 
 ## Create the frontend container
 
