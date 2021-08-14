@@ -96,3 +96,13 @@
          -`docker stop mongoctr`
          - `docker rm mongoctr`
          - `docker run -d --name mongoctr -v $(pwd)/data:/data/db --network test-network mongo:5.0.2`
+
+## Securing the MongoDB db with credentials
+
+* We can specify a user name and a password for the db [image docs](https://hub.docker.com/_/mongo)
+   - `docker stop mongoctr`
+   - `docker rm mongoctr`
+   - `docker run -d --name mongoctr -v $(pwd)/data:/data/db --network test-network -e MONGO_INITDB_ROOT_USERNAME=mongoadmin -e MONGO_INITDB_ROOT_PASSWORD=secret mongo:5.0.2`
+   - NOTE: Use docker secrets instead of passing the user and pwd in command line
+* We need to change the connection string used in the api app and rebuild it now
+   - `mongodb://mongoadmin:secret@mongoctr:27017/course-goals?authSource=admin`
