@@ -12,9 +12,13 @@ COPY . .
 ARG DEFAULT_PORT=80
 
 # Set environment variable based on ARG to use in nodejs
-ENV PORT $DEFAULT_PORT
+ENV PORT=$DEFAULT_PORT
 
 EXPOSE $PORT
+
+ENV DBUSER=username
+
+ENV DBPWD=password
 
 # Anonymous volume for the node_modules folder
 VOLUME [ "/app/node_modules" ]

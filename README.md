@@ -56,9 +56,13 @@
 * Lets add the code as a bind mount again and change the code and test.
    - `docker run --network test-network --env-file ./.env -d --name test-api -v $(pwd):/app:ro -v api-logs:/app/logs docker-test-api:initial`
    - This kept giving `permission denied, open '/app/logs/access.log'`
-   - Got it working without the named volume and the physical logs folder permission set to write all `sudo chmod ugo+rwx ./app/logs`
-   - `docker run --network test-network --env-file ./.env -d --name test-api -v $(pwd):/app:ro docker-test-api:initial`
+   - Got it working without the named volume and the physical logs folder permission set to write all `sudo chmod ugo+rwx ./app/logs` and remove `:ro` from bind mount
+   - `docker run --network test-network --env-file ./.env -d --name test-api -v $(pwd):/app docker-test-api:initial`
 
+### Start setting db username and pwd in command prompt
+
+* This ideally should be done using docker secrets. 
+    - `docker run --network test-network --env-file ./.env -e DBUSER=mongoadmin -e DBPWD=secret -d --name test-api -v $(pwd):/app docker-test-api:initial`
 
 ## Create the frontend container
 
