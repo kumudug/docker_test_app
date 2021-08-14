@@ -46,13 +46,16 @@
       - `docker run -p 3001:8081 --network test-network --env-file ./.env -d --name test-api --rm -v api-logs:/app/logs -v $(pwd):/app:ro docker-test-api:initial`
       - Code refresh caused a permission issue. Removed the bind mount and make docker run `node app.js` instead. Also removed the `--rm` flag
       - `docker run -p 3001:8081 --network test-network --env-file ./.env -d --name test-api -v api-logs:/app/log docker-test-api:initial`
+   - To create the image without exposing the api for the local machine
+      - This way the API is only accessible within the docker network
+      - `docker run --network test-network --env-file ./.env -d --name test-api -v api-logs:/app/log docker-test-api:initial`
 
 ## Create the frontend container
 
 * Created a Dockerfile
 * Created an ARG, ENV variable for api port and replaced that in the App.js
 * Build the container
-   - `docker build . -t docker-test-app:initial --build-arg DEFAULT_PORT=3000 --build-arg DEFAULT_API_PORT=3001`
+   - 
 * Create and run the image
    - We need to add `-it` interactive flag in order to keep the react dev server running
    - `docker run -p 8080:3000 --network test-network --env-file ./.env -d --name test-app -it --rm docker-test-app:initial`
@@ -60,4 +63,17 @@
    - Remove `.env` file from the `.dockerignore`
    - Duplicate the environment files with `REACT_APP_`. Ex: `REACT_APP_APIPORT=3001`
    - This makes the react-scripts read the .env file and load them in
-* The URL of the front end app currently uses the `localhost` not the actual defined Docker network. When I tried using the api app name `test-api` instead of `localhost` I got intermittent failures.
+* To access the DB from within the network
+   - Change the `localhost` to `test-api` as it's the container name
+   - Change the port to 8081 as it's the port exposed to the docker network
+   - Build and run again
+   `docker build . -t docker-test-app:initial --build-arg DEFAULT_PORT=3000 --build-arg DEFAULT_API_PORT=8081`
+   - `docker run -p 8080:3000 --network test-network --env-file ./.env -d --name test-app -it --rm docker-test-app:initial`
+   - The DB url need to be fixed
+      - Remember react runs in the browser not in the container. So the container name in the url is not understood by react.
+      - The only thing running in the container is the development server
+      - For the time being we are passing the api docker ip in a hacky way via an env variable
+      - You can find the api containers ip using the `docker container inspect` command
+      - Add the environment variable to the `env` file.
+      - `REACT_APP_API_IP=172.19.0.3`
+      - `docker run -p 8080:3000 --network test-network --env-file ./.env -d -e REACT_APP_APIIP=172.19.0.3 --name test-app -it --rm  docker-test-app:initial`
