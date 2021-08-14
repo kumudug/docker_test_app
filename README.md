@@ -77,3 +77,17 @@
       - Add the environment variable to the `env` file.
       - `REACT_APP_API_IP=172.19.0.3`
       - `docker run -p 8080:3000 --network test-network --env-file ./.env -d -e REACT_APP_APIIP=172.19.0.3 --name test-app -it --rm  docker-test-app:initial`
+
+## Making the MongoDB data persist outside of container life cycles
+
+### Using a named volume
+
+* According to MongoDB official [image](https://hub.docker.com/_/mongo) we can map a volume to /data/db to override where the data is stored.
+    - Here we are using a named docker volume to store the data. This way we can recreate the mongo container used for the app without loosing data
+* Steps
+   - Stop and delete the running mongo container 
+      -`docker stop mongoctr`
+      - `docker rm mongoctr`
+   - Start with a named volume `docker run -d --name mongoctr -v data:/data/db --network test-network mongo:5.0.2`
+   - Test by going to `http://localhost:8080/`
+
