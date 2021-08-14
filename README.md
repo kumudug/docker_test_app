@@ -55,7 +55,7 @@
 * Created a Dockerfile
 * Created an ARG, ENV variable for api port and replaced that in the App.js
 * Build the container
-   - 
+   - `docker build . -t docker-test-app:initial --build-arg DEFAULT_PORT=3000 --build-arg DEFAULT_API_PORT=3001`
 * Create and run the image
    - We need to add `-it` interactive flag in order to keep the react dev server running
    - `docker run -p 8080:3000 --network test-network --env-file ./.env -d --name test-app -it --rm docker-test-app:initial`
