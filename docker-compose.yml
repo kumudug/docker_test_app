@@ -1,0 +1,19 @@
+version: "3.9"
+services:
+    mongodb:
+        image: 'mongo:5.0.2'
+        volumes:
+            - ./data:/data/db
+        # environment: Adding to env file
+        #     # Below syntax works as well
+        #     # - MONGO_INITDB_ROOT_USERNAME=mongoadmin
+        #     # - MONGO_INITDB_ROOT_PASSWORD=secret
+        #     MONGO_INITDB_ROOT_USERNAME: mongoadmin
+        #     MONGO_INITDB_ROOT_PASSWORD: secret
+        env_file: # Good idea to add this to .gitignroe and not check in
+            - ./env/mongo.env
+        # networks: 
+        #     - test-network
+        # Docker compose by default adds all services into same network. 
+    # backend:
+    # frontend:

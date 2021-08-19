@@ -12,6 +12,7 @@
 ## Create the MongoDB container
    - Now create a MonogoDB container using an official image in the created network
       - `docker run -d --name mongoctr --network test-network mongo:5.0.2`
+      - See below for adding credentials and bind mounts to mongo container
 
 ## Create the backend container.
 
@@ -126,3 +127,12 @@
    - NOTE: Use docker secrets instead of passing the user and pwd in command line
 * We need to change the connection string used in the api app and rebuild it now
    - `mongodb://mongoadmin:secret@mongoctr:27017/course-goals?authSource=admin`
+
+## Using Docker Compose
+
+* Added a `docker-compose.yml`
+   - Added config for dynamo container
+* Start
+   - `docker-compose up -d`
+* Stop 
+   - `docker-compose down`
