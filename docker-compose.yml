@@ -2,7 +2,7 @@ version: "3.9"
 services:
     mongodb:
         image: 'mongo:5.0.2'
-        container_name: mongoctr
+        container_name: mongoctr # Don't really need this. Can refer using the service name given above without using the container name
         volumes:
             - ./data:/data/db
         # environment: Adding to env file
