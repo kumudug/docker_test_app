@@ -21,6 +21,6 @@ ENV DBUSER=username
 ENV DBPWD=password
 
 # Anonymous volume for the node_modules folder
-VOLUME [ "/app/node_modules" ]
+# VOLUME [ "/app/node_modules" ]
 
 CMD ["npm", "start"]
