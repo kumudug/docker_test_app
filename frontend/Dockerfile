@@ -19,6 +19,6 @@ ENV APIPORT $DEFAULT_API_PORT
 EXPOSE $PORT
 
 # Anonymous volume for the node_modules folder
-VOLUME [ "/app/node_modules" ]
+#VOLUME [ "/app/node_modules" ]
 
 CMD ["npm", "start"]

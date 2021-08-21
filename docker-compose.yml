@@ -35,6 +35,23 @@ services:
             - ./backend:/app
         depends_on: 
             - mongodb
-
-
-    # frontend:
+    frontend:
+        image: docker-test-app:initial
+        build:
+            context: ./frontend
+            args:
+                - DEFAULT_PORT=3000
+                - DEFAULT_API_PORT=8081
+        container_name: test_app
+        ports:
+            - '8080:3000'
+        env_file: 
+            - ./env/ui.env
+        volumes:
+            - ./frontend/src:/app/src:ro
+            - /app/node_modules
+        # -it is handled from below
+        stdin_open: true
+        tty: true
+        depends_on: 
+            - backend
